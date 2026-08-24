@@ -7,6 +7,9 @@
 
 <title>RR Brothers | Online Store</title>
 
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{
   box-sizing:border-box;
@@ -131,6 +134,10 @@ h2{
   background:#111;
   color:white;
   text-align:center;
+}
+
+.contact h2{
+  color:white;
 }
 
 footer{
@@ -368,7 +375,6 @@ Shop Now
 
 <div class="products">
 
-
 <div class="product">
 
 <div class="icon">👟</div>
@@ -439,7 +445,6 @@ Add to Cart
 </button>
 
 </div>
-
 
 </div>
 
@@ -609,6 +614,27 @@ Continue Shopping
 
 <script>
 
+/* ==============================
+   SUPABASE CONNECTION
+============================== */
+
+const SUPABASE_URL =
+"https://dlftlmfhomjhoircgock.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_2593EsVFGcdAUweHtSIpXQ_95bWthWi";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* ==============================
+   CART
+============================== */
+
 let cart=[];
 
 
@@ -763,7 +789,9 @@ openCart();
 }
 
 
-/* CHECKOUT */
+/* ==============================
+   CHECKOUT
+============================== */
 
 function openCheckout(){
 
@@ -817,9 +845,11 @@ document.getElementById("checkoutBox").style.display="none";
 }
 
 
-/* PLACE ORDER */
+/* ==============================
+   PLACE ORDER
+============================== */
 
-function placeOrder(){
+async function placeOrder(){
 
 let name=document.getElementById("name").value.trim();
 
@@ -848,16 +878,72 @@ return;
 }
 
 
+/* CALCULATE TOTAL */
+
+let total=0;
+
+cart.forEach(item=>{
+
+total += item.price * item.quantity;
+
+});
+
+
+/* SAVE ORDER TO SUPABASE */
+
+try{
+
+const { data, error } =
+await supabaseClient
+.from("orders")
+.insert([
+{
+name:name,
+phone:phone,
+city:city,
+address:address,
+total:total,
+status:"new"
+}
+])
+.select();
+
+
+if(error){
+
+console.error("Supabase error:",error);
+
+alert(
+"Order save nahi ho saka. Please try again."
+);
+
+return;
+
+}
+
+
 /* SHOW SUCCESS */
 
 document.getElementById("checkoutContent").style.display="none";
 
 document.getElementById("successBox").style.display="block";
 
+}catch(error){
+
+console.error(error);
+
+alert(
+"Connection error. Please try again."
+);
+
+}
+
 }
 
 
-/* FINISH */
+/* ==============================
+   FINISH ORDER
+============================== */
 
 function finishOrder(){
 
