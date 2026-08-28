@@ -48,10 +48,18 @@ header{
   border-bottom:1px solid #222;
 }
 
+/* LOGO */
+
 .logo{
-  font-size:25px;
-  font-weight:800;
-  letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+}
+
+.logo img{
+  width:150px;
+  height:auto;
+  display:block;
+  object-fit:contain;
 }
 
 nav a{
@@ -439,8 +447,8 @@ footer{
     padding:15px;
   }
 
-  .logo{
-    font-size:20px;
+  .logo img{
+    width:115px;
   }
 
   .hero{
@@ -468,7 +476,12 @@ footer{
 <header>
 
 <div class="logo">
-RR Brothers
+
+<img
+src="https://i.ibb.co/qMLhHmcs/rrbrothers-logo.png"
+alt="RR Brothers Logo"
+>
+
 </div>
 
 <nav>
